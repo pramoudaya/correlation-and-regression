@@ -1,0 +1,80 @@
+---
+title: "Simple Correlation"
+author: "Pramo Udaya"
+date: "6/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Simple Linear Regression Analysis:
+
+In statistical modeling the  regression analysis, basically concerns with developing models and are used to  predict the value of a variable based on the value of other variable(s). The variable of which we want to predict, is known as the outcome variable (or dependent variable), and  the variables which are use to predict, are known as explanatory or independent variables.
+
+
+## Regression
+
+The word regression means " tendency of returning to the original state". The word regression was first introduced in statistics by Francis Galton while studying biological phenomena; the height of descendants of tall and short ancestors. In his study he found that the height of the descendant tending towards the normal average height in the population and he named this tendency as Regression.
+
+## Linear Regression
+
+Linear Regression is a linear approach to model the relationship between the outcome variable (dependent variable) and the explanatory or the independent variable(s). The name linear is basically due to the linear relationship between dependent and each of the independent variables. We shall discuss about other assumptions shortly.
+
+## Simple Linear Regression
+
+Simple linear regression is a linear regression model with only one explanatory or independent variable. If we want to develop a model with two or more than two independent variables, then it is known as multiple linear regression model.
+By the dictionary meaning the word "simple" refers to the fact that the outcome variable is related to a single predictor and the word "multiple" refers to more than one predictors in the model. In our `iris` data set suppose if we wish to predict the value of the length of the petal by using the length of sepal , in such situation we can use  simple linear regression model. Obviously, petal length is dependent and sepal length will be treated as independent variable. But make sure that the model should not violate any one the underlined assumptions of regression.
+
+As every statistical tools and techniques are based on certain assumptions, before we develop a simple linear regression model, we should have to have a very good idea about the underlying assumptions of it.The following are key assumptions of regression analysis. Violations of any one of these assumptions lead to the severe problem regarding the validation of the fitted model.
+
+1. Normality     
+2. Homogeneity of variances (Homoscedasticity)            
+3. Independence                
+4. Linearity        
+5. No bad outliers
+
+Details of these assumptions will be discussed in the section --- "Assessing the assumptions of regression".
+
+## Estimation and test of a simple linear regression model
+
+Consider two variable x and y . y being dependent on x, our linear regression model to be fitted is given by; $$ y = \alpha + \beta {x} + \epsilon ........(1)$$
+Actually estimation of the linear regression model (1) is to find the estimated vales of these parameters $\alpha$ and $\beta$.
+
+There are more than a way to estimate a regression model (parameters $\alpha$ and $\beta$), among them the most technical name to estimate linear regression model is ordinary least squares (OLS). OLS is the principle which allow us to draw a line of best fit to the observations such that the sum of squared error ($\epsilon$)^[$\epsilon$ is the unexplained part of the model known as error in the model $y = \alpha + \beta {x} + \epsilon$.] for each pair of observation is least. For example if we wish to predict length of petal by using length of sepal then the scatter plot will look like this. 
+
+```{r, comment=NA, fig.cap= " Scatter plot of Petal length on Sepal length"}
+plot(iris$Sepal.Length, iris$Petal.Length,
+     xlab = "Sepal Length",
+     ylab = "Petal Length")
+```
+
+Now using the principle of OLS we are interested to draw a line of best fit for these observation.
+
+In R we can use built in function `lm()` to develop a linear regression model. The argument for using this function is `model = y ~ x`, y is dependent and x is independent variable and `data = data frame`
+
+```{r, comment=NA}
+model.1 = lm (Petal.Length ~ Sepal.Length ,data = iris)
+summary(model.1) # The result is stored in lm object `model.1`
+```
+
+This summary output gives the simple linear regression model to predict length of petal by using the sepal length as per this sample data `iris`. The model looks like
+$$\widehat {Petal \ Length} = -7.10144 + 1.85843 \times Sepal \ Length$$ 
+
+
+The estimated values are found as $\alpha$ = `r summary(model.1)$coefficients["(Intercept)","Estimate"]`
+and $\beta$ = `r summary(model.1)$coefficients["Sepal.Length","Estimate"]`. In general we denote this estimated values of $\alpha$ as $\widehat{a}$ and that of $\beta$ as $\widehat{b}$.^[The values of "a" and "b" are obtained by using ordinary least squares (OLS) principle from which it can be derived the following two normal equations. $\sum y = na + b \sum x$ and  $\sum xy = a \sum x + b \sum x^2$]
+
+Also another important thing from the above table we can extract is the p- value (probability value) which is used to make decision while testing the hypothesis.^[For the simple linear regression analysis if we wish to test whether the linear relationship between dependent and independent variable is significant or not, the null hypothesis (H~0~): There is no significant linear relationship between dependent and independent variable. Against, the alternative hypothesis (H~1~): There exists significant linear relationship between them (the regression coefficient is significant).] Since the p-value for the independent variable `Sepal.Length` is `r summary(model.1)$coefficients["Sepal.Length","Pr(>|t|)"]` which is far small than our threshold value 0.05, we can conclude that the variable is seems highly significant. But  make sure that we have not assessed the assumptions yet. we need to assess the underlying assumption before we generalize our findings. One more important statistic we can extract from the above result is coefficient of determination (the R squared value). This value for this model is `r summary(model.1)$r.squared`, which means that the almost 76 percent variation in Petal length is explained by the variation of sepal length. That means 76% of the variation in petal length is accounted for the sepal length, according to this sample data. The value of adjusted R square is not interpreteable in linear regression. We shall talk about this in multiple regression analysis.
+
+\newpage
+
+suppose if we wish to embed this line over the scatter plot; we use following commands, called `abline()`.
+
+```{r, comment=NA, fig.cap= "Scatter plot embedded with the line of best fit" }
+plot(Petal.Length ~ Sepal.Length ,data = iris)
+abline(model.1) # `model.1` is our `lm` object
+```
+
+
