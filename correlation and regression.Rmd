@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Simple Linear Regression Analysis:
+# Simple Linear Regression Analysis
 
 In statistical modeling the  regression analysis, basically concerns with developing models and are used to  predict the value of a variable based on the value of other variable(s). The variable of which we want to predict, is known as the outcome variable (or dependent variable), and  the variables which are use to predict, are known as explanatory or independent variables.
 
